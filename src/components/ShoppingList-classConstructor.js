@@ -11,7 +11,6 @@ const [quantity, setQuantity] = useState(0);
 const [itemsList, setItemsList] = useState(item)
 const [value, setValue] = useState("")
 const [isChecked, setIsChecked] = useState(false)
-const [warning, setWarning] = useState("")
 
 function increaseItemQty (itemValue) {
     const newArr = [...itemsList]
@@ -56,10 +55,11 @@ const handler = (event) => {
    let doesExist = itemsList.some(item => item.item === value)
    let newItem = {item:value, quantity:0, isChecked: isChecked}
 
-    doesExist ? setWarning(value) : 
+    if(!doesExist) {
     value && setItemsList([...itemsList, newItem])
     setValue("")
     setIsChecked(false)
+    }
   
 
 }
@@ -71,7 +71,7 @@ const deleteItem = (value) => {
 
 const chooseClass = (name) => {
     let className 
-    (name === warning) ? (className='existingItem') : (className='')
+    (name === value) ? (className='existingItem') : (className='')
     return className
 } 
 
