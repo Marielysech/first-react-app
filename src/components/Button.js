@@ -1,9 +1,9 @@
 
-const Button = ({color, text, event}) => {
+const Button = ({color, text, handler}) => {
 
     return (
        <span>
-            <button style={{backgroundColor: color}} onClick={event}>{text}</button>
+            <button style={{backgroundColor: color}} onClick={handler}>{text}</button>
       </span> 
     )
 }

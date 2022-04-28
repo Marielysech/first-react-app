@@ -23,3 +23,7 @@ code {
 .navBar span {
   margin:  1rem;
 }
+
+.existingItem {
+  color: red
+}

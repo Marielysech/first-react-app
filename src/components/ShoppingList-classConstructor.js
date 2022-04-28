@@ -1,57 +1,130 @@
 import Button from './Button'
-import React from 'react'
+import React, {useState} from 'react'
 
-// const ShoppingList = ({item, color1, color2, text1, text2}) => {
+const ShoppingList = ({item, color1, color2, text1, text2}) => {
 
-//     let quantity = 0;
-    
-//     function increaseCounter(){
-//         console.log(quantity)
-//         return quantity = quantity +1
-//     } ;
-//     function decreaseCounter(){
-//         return quantity = quantity -1
+function random() {
+    return Math.random().toString()
+}
+
+const [quantity, setQuantity] = useState(0);
+const [itemsList, setItemsList] = useState(item)
+const [value, setValue] = useState("")
+const [isChecked, setIsChecked] = useState(false)
+const [warning, setWarning] = useState("")
+
+function increaseItemQty (itemValue) {
+    const newArr = [...itemsList]
+    const index = newArr.findIndex(elem => elem.item === itemValue)
+    newArr[index].quantity++
+    setQuantity(newArr)
+}
+
+function decreaseItemQty (itemValue) {
+    const newArr = [...itemsList]
+    const index = newArr.findIndex(elem => elem.item === itemValue)
+    newArr[index].quantity--
+    setQuantity(newArr)
+}
+
+if (!(item.length)) {
+    return (<><h2>The Shopping List is empty !</h2></>)
+}
+// class ShoppingList extends React.Component {
+//         constructor(props) {
+//         super(props)
+//         this.state = {
+//             quantity: 0,
+//         }
+
 //     }
 
-    function random() {
-        return Math.random().toString()
-    }
 
-class ShoppingList extends React.Component {
-        constructor(props) {
-        super(props)
-        this.state = {
-            quantity: 0,
-        }
-
-    }
+//     increaseCounter () {
+//         this.setState({quantity: this.state.quantity +1});
+//     } ;
 
 
-    increaseCounter () {
-        this.setState({quantity: this.state.quantity +1});
-    } ;
+//     decreaseCounter(){
+//         this.setState({quantity: this.state.quantity -1})
+//     }
+//     render () {
 
 
-    decreaseCounter(){
-        this.setState({quantity: this.state.quantity -1})
-    }
+const handler = (event) => {
+    event.preventDefault()
+   let doesExist = itemsList.some(item => item.item === value)
+   let newItem = {item:value, quantity:0, isChecked: isChecked}
 
-    render () {
-        return (
-            <div>
-                 <ul>
-                 {this.props.item.map(item => 
-                 <li key={random()}> 
-                     {item}: {this.state.quantity} 
-                     <Button color={this.props.color1} text={this.props.text1} event={() =>this.increaseCounter()}/>
-                     <Button color={this.props.color2} text={this.props.text2} event={() =>this.decreaseCounter()}/> 
-                 </li>)}
-                 </ul>
-             </div> 
-         )
-     
-    }
+    doesExist ? setWarning(value) : 
+    value && setItemsList([...itemsList, newItem])
+    setValue("")
+    setIsChecked(false)
+  
+
 }
+
+const deleteItem = (value) => {
+    const newList = itemsList.filter(item => item.item !== value)
+    setItemsList(newList)
+}
+
+const chooseClass = (name) => {
+    let className 
+    (name === warning) ? (className='existingItem') : (className='')
+    return className
+} 
+
+    return (
+                <div>
+                <form>
+                    <input
+                    placeholder="Add items here"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    ></input>
+                    <p>{value}</p>
+                    <button onClick={handler}>add</button>
+                    <label>
+                    Urgent
+                    <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={(e) => setIsChecked(e.target.checked)}
+                    ></input>
+                    </label>
+                </form>
+                <ul>
+                    {itemsList.map((item, index) =>
+                    item.item === "banana" ? (
+                        <h2>I dont like banana</h2>
+                    ) : (
+                        <li className={chooseClass(item.item)} key={random()}>
+                        {item.item}: {item.quantity} {item.isChecked && <em>URGENT</em>}
+                        <Button
+                            color={color1}
+                            text={text1}
+                            handler={() => increaseItemQty(item.item)}
+                        />
+                        {item.quantity > 0 && (
+                            <Button
+                            color={color2}
+                            text={text2}
+                            handler={() => decreaseItemQty(item.item)}
+                            />
+                        )}
+                        <Button
+                            color="yellow"
+                            text="delete item"
+                            handler={() => deleteItem(item.item)}
+                        />
+                        </li>
+                    )
+                    )}
+                </ul>
+                </div>
+    );
+    };
 
     // function tick() {
     //     date = new Date().
