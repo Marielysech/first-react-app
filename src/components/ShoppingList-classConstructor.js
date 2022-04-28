@@ -59,8 +59,7 @@ const handler = (event) => {
     value && setItemsList([...itemsList, newItem])
     setValue("")
     setIsChecked(false)
-    }
-  
+    } setValue("");
 
 }
 
